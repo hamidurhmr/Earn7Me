@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🎯 Task Reward Game 💰</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background: black;
+            color: white;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 400px;
+            margin: 50px auto;
+            padding: 20px;
+            background: white;
+            color: black;
+            border-radius: 15px;
+            box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        button {
+            padding: 12px;
+            width: 100%;
+            margin: 8px 0;
+            font-size: 16px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .task-btn {
+            background: #28a745;
+            color: white;
+        }
+
+        .task-btn.completed {
+            background: #6c757d;
+            cursor: default;
+        }
+
+        .redeem-btn {
+            background: #ffc107;
+            color: black;
+            font-weight: bold;
+        }
+
+        .redeem-btn:hover {
+            background: #e0a800;
+        }
+
+        #redeemCode {
+            font-size: 18px;
+            font-weight: bold;
+            color: #ff5733;
+            margin-top: 10px;
+        }
+
+        #process {
+            background: black;
+            color: #00ff00;
+            font-family: monospace;
+            padding: 10px;
+            display: none;
+            height: 150px;
+            overflow: hidden;
+            text-align: left;
+        }
+
+        select {
+            padding: 10px;
+            width: 100%;
+            margin: 10px 0;
+            font-size: 16px;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h2>🎯 Complete All Tasks & Get 1000 Coins! 💰</h2>
+        <p><b>🔥 Coins:</b> <span id="coins">0</span></p>
+        
+        <div id="tasks">
+            <button class="task-btn" onclick="completeTask(1, 'https://youtube.com/@hameedurrahman-786?si=16BT96wsbbUeo4U3')">📢 Subscribe YT</button>
+            <button class="task-btn" onclick="completeTask(2, 'https://youtube.com/shorts/sULkYx-jsiM?si=dM02m-ERgOCP_FSW')">👍 Like YT Video</button>
+            <button class="task-btn" onclick="completeTask(3, 'https://youtube.com/shorts/sULkYx-jsiM?si=dM02m-ERgOCP_FSW')">💬 Comment YT Video</button>
+            <button class="task-btn" onclick="completeTask(4, 'https://youtube.com/shorts/sULkYx-jsiM?si=dM02m-ERgOCP_FSW')">📤 Share YT Video</button>
+            <button class="task-btn" onclick="completeTask(5, 'https://www.instagram.com/hamidur_hmr?igsh=MWVlNGZhZjhjdTdyZA==')">📸 Follow Instagram</button>
+            <button class="task-btn" onclick="completeTask(6, 'https://www.instagram.com/reel/C2r1qPdxoRi/?igsh=NDgweXBrbTRoOHlw')">❤️ Like Insta Post</button>
+            <button class="task-btn" onclick="completeTask(7, 'https://www.instagram.com/reel/C2r1qPdxoRi/?igsh=NDgweXBrbTRoOHlw')">💭 Comment Insta Post</button>
+        </div>
+
+        <select id="redeemType">
+            <option value="Google Play">🎮 Google Play</option>
+            <option value="Paytm">💰 Paytm</option>
+            <option value="Amazon">🛒 Amazon</option>
+        </select>
+
+        <button class="redeem-btn" onclick="redeemReward()">🎁 Redeem ₹20</button>
+        <div id="process"></div>
+        <p id="redeemCode"></p>
+    </div>
+
+    <script>
+        let tasksCompleted = [];
+        const totalTasks = 7;
+
+        function completeTask(taskId, url) {
+            if (!tasksCompleted.includes(taskId)) {
+                tasksCompleted.push(taskId);
+                window.open(url, '_blank');
+                
+                if (tasksCompleted.length === totalTasks) {
+                    document.getElementById('coins').innerText = "1000";
+                }
+            } else {
+                alert("❌ You already completed this task!");
+            }
+        }
+
+        function generateRedeemCode(type) {
+            let code = "";
+            switch (type) {
+                case "Google Play":
+                    code = `GXLN-${randomCode()}-${randomCode()}`;
+                    break;
+                case "Paytm":
+                    code = `PTM-${randomCode()}-${randomCode()}`;
+                    break;
+                case "Amazon":
+                    code = `AMZN-${randomCode()}-${randomCode()}`;
+                    break;
+            }
+            return code;
+        }
+
+        function randomCode() {
+            return Math.random().toString(36).substr(2, 4).toUpperCase();
+        }
+
+        function showProcess(callback) {
+            let processDiv = document.getElementById("process");
+            processDiv.style.display = "block";
+            processDiv.innerText = "";
+
+            let steps = [
+                "🔍 Verifying User Identity...",
+                "✅ Tasks Completion Verified!",
+                "🔄 Generating Secure Code...",
+                "🔒 Encrypting Code Data...",
+                "📡 Connecting to Server...",
+                "✅ Redeem Code Successfully Generated!"
+            ];
+
+            let index = 0;
+            let interval = setInterval(() => {
+                if (index < steps.length) {
+                    processDiv.innerText += steps[index] + "\n";
+                    index++;
+                } else {
+                    clearInterval(interval);
+                    callback();
+                }
+            }, 1500);
+        }
+
+        function redeemReward() {
+            let coins = parseInt(document.getElementById('coins').innerText);
+            let type = document.getElementById('redeemType').value;
+
+            if (coins === 1000) {
+                showProcess(() => {
+                    let code = generateRedeemCode(type);
+                    document.getElementById('redeemCode').innerText = `🎉 Your ${type} ₹20 Code: ${code}`;
+                    document.getElementById('coins').innerText = "0";
+                });
+            } else {
+                alert("⚠️ Complete all tasks to get 1000 coins.");
+            }
+        }
+    </script>
+
+</body>
+</html>
